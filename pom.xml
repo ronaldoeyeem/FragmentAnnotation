@@ -4,8 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.eyeem</groupId>
-    <artifactId>FragmentAnnotation</artifactId>
+    <!--
+    about this doc
+    http://central.sonatype.org/pages/apache-maven.html
+    -->
+
+    <!-- BASE INFORMATION -->
+
+    <groupId>com.eyeem.fragmentAnnotation</groupId>
+    <artifactId>plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -37,8 +44,10 @@
         <url>https://github.com/ronaldoeyeem/FragmentAnnotation</url>
     </scm>
 
-    <build>
 
+    <!-- doc and source code generation -->
+
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -65,9 +74,53 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
 
+            <!-- GPG signing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- sonatype upload -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.2</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+        </plugins>
     </build>
 
+    <!-- sonatype management -->
+    <distributionManagement>
+        <!-- use the following if you ARE using a snapshot version. -->
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+        <!-- use the following if you're not using a snapshot version. -->
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
